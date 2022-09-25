@@ -7,13 +7,13 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o /clean-architecture-go
+RUN cd ./app && go build -o /clean-arch
 
 # step 2: build a small image
 FROM alpine:3.16.0
 WORKDIR /app
-COPY --from=builder clean-architecture-go .
-COPY .env .
-EXPOSE 8080
-CMD ["./clean-architecture-go"]
+COPY --from=builder clean-arch .
+COPY ./config.yaml .
+EXPOSE 9099
+CMD ["./clean-arch"]
 # CMD ["./clean-architecture-go", "-m=migrate"]
